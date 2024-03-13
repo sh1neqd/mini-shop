@@ -1,0 +1,8 @@
+time="2024-03-11T21:40:57+05:00" level=info msg="creating router" func="github.com/sirupsen/logrus.(*Entry).Info()" file="entry.go:285"
+time="2024-03-11T21:40:57+05:00" level=info msg="read application configuration" func="github.com/sirupsen/logrus.(*Entry).Info()" file="entry.go:285"
+time="2024-03-11T21:40:57+05:00" level=info msg="listen unix socket" func="github.com/sirupsen/logrus.(*Entry).Info()" file="entry.go:285"
+time="2024-03-11T21:40:57+05:00" level=info msg="server is listening port 5050:0.0.0.0" func="github.com/sirupsen/logrus.(*Entry).Logf()" file="entry.go:314"
+time="2024-03-11T23:22:38+05:00" level=info msg="creating router" func="github.com/sirupsen/logrus.(*Entry).Info()" file="entry.go:285"
+time="2024-03-11T23:22:38+05:00" level=info msg="read application configuration" func="github.com/sirupsen/logrus.(*Entry).Info()" file="entry.go:285"
+time="2024-03-11T23:22:38+05:00" level=info msg="listen unix socket" func="github.com/sirupsen/logrus.(*Entry).Info()" file="entry.go:285"
+time="2024-03-11T23:22:38+05:00" level=info msg="server is listening port 5050:0.0.0.0" func="github.com/sirupsen/logrus.(*Entry).Logf()" file="entry.go:314"
