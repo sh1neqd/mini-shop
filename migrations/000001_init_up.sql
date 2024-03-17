@@ -13,6 +13,12 @@ create table public.category(
 
 CREATE TABLE public.item(
                             id int primary key generated always as identity,
-                            name varchar(100) not null,
-                            category_id int REFERENCES category(id)
+                            name varchar(100) not null
+);
+
+CREATE TABLE public.item_category(
+                            item_id int not null,
+                            category_id int not null,
+                            FOREIGN KEY (item_id) references public.item(id),
+                            FOREIGN KEY (category_id) references public.category(id)
 );
