@@ -1,8 +1,8 @@
 CREATE TABLE public.user(
-                            id int primary key generated always as identity,
-                            username varchar(100) not null ,
+                            id int primary key generated always as identity unique,
+                            username varchar(100) not null unique ,
                             password varchar(100) not null ,
-                            email varchar(100) not null
+                            email varchar(100) not null unique
 );
 
 

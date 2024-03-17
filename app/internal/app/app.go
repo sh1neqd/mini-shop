@@ -12,7 +12,12 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	_ "testAssignment/docs"
 	"testAssignment/internal/config"
+	"testAssignment/internal/handlers"
+	"testAssignment/internal/repositories"
+	"testAssignment/internal/services"
+	"testAssignment/pkg/client/postgresql"
 	"testAssignment/pkg/logging"
 	"time"
 )
@@ -32,9 +37,17 @@ func NewApp(config *config.Config, logger *logging.Logger) (App, error) {
 	router.Handler(http.MethodGet, "/swagger", http.RedirectHandler("/swagger/index.html", http.StatusMovedPermanently))
 	router.Handler(http.MethodGet, "/swagger/*any", httpSwagger.WrapHandler)
 
+	logger.Println("postgresql initializing")
+	db, err := postgresql.NewPostgresDB(config)
+	if err != nil {
+		fmt.Errorf("failed to initilize db: %v", err)
+	}
+	repos := repositories.NewRepository(db)
+	service := services.NewService(repos)
+	handler := handlers.NewHandler(service)
+	handler.InitRoutes(router)
 	logger.Println("heartbeat metric initializing")
-	//metricHandler := metric.Handler{}
-	//metricHandler.Register(router)
+	//handlers.Setup(router, logger, config)
 
 	return App{
 		cfg:    config,

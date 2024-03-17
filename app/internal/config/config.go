@@ -12,7 +12,7 @@ type Config struct {
 	Listen        struct {
 		Type       string `env:"LISTEN_TYPE" env-default:"port" env-description:"'port' or 'sock'. if 'sock' then env 'SOCKET_FILE' is required"`
 		BindIP     string `env:"BIND_IP" env-default:"0.0.0.0"`
-		Port       string `env:"PORT" env-default:"10000"`
+		Port       string `env:"PORT" env-default:"5000"`
 		SocketFile string `env:"SOCKET_FILE" env-default:"app.sock"`
 	}
 	AppConfig struct {
@@ -21,6 +21,14 @@ type Config struct {
 			Email    string `env:"ADMIN_EMAIL" env-default:"admin"`
 			Password string `env:"ADMIN_PWD" env-default:"admin"`
 		}
+	}
+	PostgreSQL struct {
+		Host     string `env:"PSQL_HOST"  env-default:"localhost"`
+		Port     int    `env:"PSQL_PORT"  env-default:"5432"`
+		Username string `env:"PSQL_USERNAME"  env-default:"postgres"`
+		Password string `env:"PSQL_PASSWORD" env-default:"postgres"`
+		Database string `env:"PSQL_DATABASE"  env-default:"test"`
+		SSLMode  string `env:"SSL_MODE" env-default:"disable"`
 	}
 }
 

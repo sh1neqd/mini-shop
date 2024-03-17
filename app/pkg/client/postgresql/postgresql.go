@@ -1,41 +1,27 @@
 package postgresql
 
 import (
-	"context"
 	"fmt"
-	"github.com/jackc/pgconn"
-	"github.com/jackc/pgx/v4"
-	"github.com/jackc/pgx/v4/pgxpool"
-	"log"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 	"testAssignment/internal/config"
-	"testAssignment/pkg/utils"
-	"time"
 )
 
-type Client interface {
-	Exec(ctx context.Context, sql string, arguments ...interface{}) (pgconn.CommandTag, error)
-	Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error)
-	QueryRow(ctx context.Context, sql string, args ...interface{}) pgx.Row
-	Begin(ctx context.Context) (pgx.Tx, error)
-}
-
-func NewClient(ctx context.Context, maxAttempts int, sc config.StorageConfig) (pool *pgxpool.Pool, err error) {
-	dsn := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", sc.Username, sc.Password, sc.Host, sc.Port, sc.Database)
-	err = utils.DoWithTries(func() error {
-		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-		defer cancel()
-
-		pool, err = pgxpool.Connect(ctx, dsn)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	}, maxAttempts, 5*time.Second)
-
+func NewPostgresDB(config *config.Config) (*sqlx.DB, error) {
+	cfg := config.PostgreSQL
+	db, err := sqlx.Open("postgres", fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=%s",
+		cfg.Host, cfg.Username, cfg.Password, cfg.Database, cfg.Port, cfg.SSLMode))
 	if err != nil {
-		log.Fatal("error do with tries postgresql")
+		logrus.Errorf("failed to connect to db, err: %s", err.Error())
+		return nil, err
 	}
 
-	return pool, nil
+	err = db.Ping()
+	if err != nil {
+		logrus.Errorf("failed to ping db, err: %v", err)
+		return nil, err
+	}
+
+	return db, nil
 }
