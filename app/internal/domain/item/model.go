@@ -1,6 +1,7 @@
 package item
 
 type Item struct {
-	ID   int32  `json:"id"`
-	Name string `json:"name"`
+	ID    int32  `json:"id"`
+	Name  string `json:"name"`
+	Price int    `json:"price"`
 }

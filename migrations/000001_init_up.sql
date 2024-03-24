@@ -8,12 +8,13 @@ CREATE TABLE public.user(
 
 create table public.category(
                                 id int primary key generated always as identity,
-                                name varchar(100)
+                                name varchar(100) unique
 );
 
 CREATE TABLE public.item(
                             id int primary key generated always as identity,
-                            name varchar(100) not null
+                            name varchar(100) not null unique ,
+                            price int not null
 );
 
 CREATE TABLE public.item_category(

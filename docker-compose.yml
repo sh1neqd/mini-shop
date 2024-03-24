@@ -1,0 +1,25 @@
+services:
+  server:
+    depends_on:
+      - db
+    build: .
+    ports:
+      - "5000:5000"
+    networks:
+      - minishopnetwork
+
+  db:
+    restart: always
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./migrations/000001_init_up.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - minishopnetwork
+
+networks:
+  minishopnetwork:

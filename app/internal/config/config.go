@@ -23,11 +23,11 @@ type Config struct {
 		}
 	}
 	PostgreSQL struct {
-		Host     string `env:"PSQL_HOST"  env-default:"localhost"`
+		Host     string `env:"PSQL_HOST"  env-default:"db"`
 		Port     int    `env:"PSQL_PORT"  env-default:"5432"`
 		Username string `env:"PSQL_USERNAME"  env-default:"postgres"`
 		Password string `env:"PSQL_PASSWORD" env-default:"postgres"`
-		Database string `env:"PSQL_DATABASE"  env-default:"test"`
+		Database string `env:"PSQL_DATABASE"  env-default:"postgres"`
 		SSLMode  string `env:"SSL_MODE" env-default:"disable"`
 	}
 }

@@ -30,12 +30,13 @@ func (r *Auth) CreateUser(dto user.CreateUserDTO) (int, error) {
 
 func (r *Auth) GetById(id int) (user.User, error) {
 	var u user.User
-	q := `SELECT id, username, password, email FROM public.user WHERE id = $1`
-	row := r.db.QueryRow(q, id)
-	err := row.Scan(&u)
+	q := `SELECT username, email FROM public.user WHERE id = $1`
+	err := r.db.Get(&u, q, id)
 	if err != nil {
+		fmt.Println(err.Error())
 		return user.User{}, err
 	}
+	u.ID = int32(id)
 	return u, err
 }
 
@@ -79,5 +80,4 @@ func (r *Auth) UserExist(username string) bool {
 	}
 
 	return true
-
 }

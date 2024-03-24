@@ -6,13 +6,11 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/cors"
-	httpSwagger "github.com/swaggo/http-swagger"
 	"net"
 	"net/http"
 	"os"
 	"path"
 	"path/filepath"
-	_ "testAssignment/docs"
 	"testAssignment/internal/config"
 	"testAssignment/internal/handlers"
 	"testAssignment/internal/repositories"
@@ -33,21 +31,18 @@ func NewApp(config *config.Config, logger *logging.Logger) (App, error) {
 	logger.Println("router initializing")
 	router := httprouter.New()
 
-	logger.Println("swagger docs initializing")
-	router.Handler(http.MethodGet, "/swagger", http.RedirectHandler("/swagger/index.html", http.StatusMovedPermanently))
-	router.Handler(http.MethodGet, "/swagger/*any", httpSwagger.WrapHandler)
-
 	logger.Println("postgresql initializing")
 	db, err := postgresql.NewPostgresDB(config)
 	if err != nil {
-		fmt.Errorf("failed to initilize db: %v", err)
+		logger.Errorf("failed to initilize db: %v", err)
 	}
+	logger.Println("initialize repos, services and handlers")
 	repos := repositories.NewRepository(db)
 	service := services.NewService(repos)
 	handler := handlers.NewHandler(service)
+
 	handler.InitRoutes(router)
 	logger.Println("heartbeat metric initializing")
-	//handlers.Setup(router, logger, config)
 
 	return App{
 		cfg:    config,
@@ -94,8 +89,7 @@ func (a *App) startHTTP() {
 		AllowedHeaders:     []string{"Location", "Charset", "Access-Control-Allow-Origin", "Content-Type", "content-type", "Origin", "Accept", "Content-Length", "Accept-Encoding", "X-CSRF-Token"},
 		OptionsPassthrough: true,
 		ExposedHeaders:     []string{"Location", "Authorization", "Content-Disposition"},
-		// Enable Debugging for testing, consider disabling in production
-		Debug: false,
+		Debug:              false,
 	})
 
 	handler := c.Handler(a.router)

@@ -2,6 +2,8 @@ package repositories
 
 import (
 	"github.com/jmoiron/sqlx"
+	"testAssignment/internal/domain/category"
+	"testAssignment/internal/domain/item"
 	"testAssignment/internal/domain/user"
 )
 
@@ -14,30 +16,32 @@ type Authorization interface {
 }
 
 type Item interface {
-	Create() (int, error)
-	GetAll() error
-	GetById()
-	Delete(userId, listId int) error
+	Create(dto item.CreateItemDTO) (int, error)
+	GetAll() ([]item.GetItemsDto, error)
+	GetById(id int) (item.GetItemsDto, error)
+	Delete(id int) error
+	Update(id int, dto item.UpdateItemDTO) error
+	AddCategoryForItem(itemId, categoryId int) error
 }
 
 type Category interface {
-	Create()
-	GetAll(userId, listId int)
-	GetById(userId, itemId int)
-	Delete(userId, itemId int) error
-	Update(userId, itemId int)
+	Create(dto category.CreateCategoryDTO) (int, error)
+	GetAll() ([]category.Category, error)
+	GetById(id int) (category.Category, error)
+	Delete(id int) error
+	Update(id int, dto category.CreateCategoryDTO) error
 }
 
 type Repository struct {
 	Authorization
-	//Item
-	//Category
+	Item
+	Category
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuth(db),
-		//Item:          NewItemPostgres(db),
-		//Category:      NewCategoryPostgres(db),
+		Item:          NewItemRepo(db),
+		Category:      NewCategoryRepo(db),
 	}
 }

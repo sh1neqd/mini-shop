@@ -47,7 +47,8 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 		logrus.Println(token.SignedString([]byte(signingKey)))
 		return token.SignedString([]byte(signingKey))
 	} else {
-		logrus.Errorf("password not passed")
+		err = errors.New("password not passed")
+		logrus.Errorf(err.Error())
 	}
 	if err != nil {
 		logrus.Errorf("failed to generate token, err:%v", err)

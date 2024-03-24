@@ -14,7 +14,18 @@ func NewHandler(services *services.Service) *Handler {
 }
 
 func (h *Handler) InitRoutes(router *httprouter.Router) {
-	router.POST("/api/", h.signUp)
-	router.POST("/api/login", h.signIn)
-	router.GET("/api/", h.test)
+	// Auth logic
+	router.POST("/api/signup", h.signUp)
+	router.POST("/api/signin", h.signIn)
+	// Category logic
+	router.POST("/api/category", h.Create)
+	router.GET("/api/category/:id", h.GetById)
+	router.PATCH("/api/category/:id", h.Update)
+	router.DELETE("/api/category/:id", h.Delete)
+	// Item logic
+	router.POST("/api/item", h.CreateItem)
+	router.GET("/api/item/:id", h.GetByItemId)
+	router.PATCH("/api/item/:id", h.UpdateItem)
+	router.DELETE("/api/item/:id", h.DeleteItem)
+	router.POST("/api/item/:id", h.AddCategoryToItem)
 }
