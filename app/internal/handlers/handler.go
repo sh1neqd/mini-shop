@@ -18,11 +18,13 @@ func (h *Handler) InitRoutes(router *httprouter.Router) {
 	router.POST("/api/signup", h.signUp)
 	router.POST("/api/signin", h.signIn)
 	// Category logic
+	router.GET("/api/category", h.GetAll)
 	router.POST("/api/category", h.Create)
 	router.GET("/api/category/:id", h.GetById)
 	router.PATCH("/api/category/:id", h.Update)
 	router.DELETE("/api/category/:id", h.Delete)
 	// Item logic
+	router.GET("/api/item", h.GetAllItems)
 	router.POST("/api/item", h.CreateItem)
 	router.GET("/api/item/:id", h.GetByItemId)
 	router.PATCH("/api/item/:id", h.UpdateItem)
